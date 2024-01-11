@@ -9,6 +9,7 @@ import {
 import {AuthServiceClient} from '../../gen/block-engine/auth';
 import {BundleResult} from '../../gen/block-engine/bundle';
 import {
+  ConnectedLeadersRegionedResponse,
   ConnectedLeadersResponse,
   GetTipAccountsResponse,
   NextScheduledLeaderResponse,
@@ -80,7 +81,7 @@ export class SearcherClient {
    * @returns A Promise that resolves to a map, where keys are validator identity keys (usually public keys), and values are SlotList objects.
    * @throws A ServiceError if there's an issue with the server while fetching connected leaders.
    */
-  async getConnectedLeaders(): Promise<{[key: string]: SlotList}> {
+  async getConnectedLeaders(): Promise<{ [key: string]: SlotList }> {
     return new Promise((resolve, reject) => {
       this.client.getConnectedLeaders(
         {},
@@ -113,6 +114,23 @@ export class SearcherClient {
       this.client.getNextScheduledLeader(
         {},
         async (e: ServiceError | null, resp: NextScheduledLeaderResponse) => {
+          if (e) {
+            reject(e);
+          } else {
+            resolve(resp);
+          }
+        }
+      );
+    });
+  }
+
+  async getConnectedLeadersRegioned(regions: ['frankfurt', 'tokyo', 'ny', 'amsterdam']): Promise<{
+    connectedValidators: { [key: string]: ConnectedLeadersResponse }
+  }> {
+    return new Promise((resolve, reject) => {
+      this.client.getConnectedLeadersRegioned(
+        {regions},
+        async (e: ServiceError | null, resp: ConnectedLeadersRegionedResponse) => {
           if (e) {
             reject(e);
           } else {
@@ -165,7 +183,7 @@ export class SearcherClient {
    * @param onError - A callback function that receives the stream error (Error)
    * @returns An async generator that yields transactions (VersionedTransaction[]) that use the provided programs
    */
-  async *programUpdates(
+  async* programUpdates(
     programs: PublicKey[],
     regions: string[],
     onError: (e: Error) => void
@@ -238,7 +256,7 @@ export class SearcherClient {
    * @param onError - A callback function that receives the stream error (Error)
    * @returns An async generator that yields updated transactions (VersionedTransaction[]) on account updates
    */
-  async *accountUpdates(
+  async* accountUpdates(
     accounts: PublicKey[],
     regions: string[],
     onError: (e: Error) => void
@@ -302,7 +320,7 @@ export class SearcherClient {
    * @param onError - A callback function that receives the stream error (Error)
    * @returns An async generator that yields BundleResult updates
    */
-  async *bundleResults(
+  async* bundleResults(
     onError: (e: Error) => void
   ): AsyncGenerator<BundleResult> {
     const stream: ClientReadableStream<BundleResult> =
