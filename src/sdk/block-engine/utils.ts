@@ -5,7 +5,7 @@ import fnv1a from '@sindresorhus/fnv1a';
 
 import { LRUCache } from 'typescript-lru-cache';
 
-const cache = new LRUCache<bigint, bigint>({
+const cache = new LRUCache<number, number>({
   maxSize: 25000,
   entryExpirationTimeInMS: 5000,
 });
@@ -17,8 +17,15 @@ export const unixTimestampFromDate = (date: Date) => {
 export const deserializeTransactions = (
   packets: Packet[]
 ): VersionedTransaction[] => {
-  return packets.map(p => {
-    const hash = fnv1a(p.data, {size: 32});
+  return packets
+    .filter(p => {
+      const hash = Number(fnv1a(p.data, {size: 32}));
+      if (cache.has(hash)) {
+        return false
+      }
+      cache.set(hash, hash)
+      return true
+    }).map(p => {
     return VersionedTransaction.deserialize(p.data);
   });
 };
