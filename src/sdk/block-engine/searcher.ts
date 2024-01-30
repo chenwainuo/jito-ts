@@ -133,7 +133,6 @@ export class SearcherClient {
    */
   onProgramUpdate(
     programs: PublicKey[],
-    regions: string[],
     successCallback: (transactions: VersionedTransaction[]) => void,
     errorCallback: (e: Error) => void
   ): () => void {
@@ -142,7 +141,6 @@ export class SearcherClient {
         programV0Sub: {
           programs: programs.map(p => p.toString()),
         },
-        regions,
       });
 
     stream.on('readable', () => {
@@ -167,7 +165,6 @@ export class SearcherClient {
    */
   async *programUpdates(
     programs: PublicKey[],
-    regions: string[],
     onError: (e: Error) => void
   ): AsyncGenerator<VersionedTransaction[]> {
     const stream: ClientReadableStream<PendingTxNotification> =
@@ -175,7 +172,6 @@ export class SearcherClient {
         programV0Sub: {
           programs: programs.map(p => p.toString()),
         },
-        regions,
       });
 
     stream.on('error', e => {
@@ -206,7 +202,6 @@ export class SearcherClient {
    */
   onAccountUpdate(
     accounts: PublicKey[],
-    regions: string[],
     successCallback: (transactions: VersionedTransaction[]) => void,
     errorCallback: (e: Error) => void
   ): () => void {
@@ -215,7 +210,6 @@ export class SearcherClient {
         wlaV0Sub: {
           accounts: accounts.map(a => a.toString()),
         },
-        regions,
       });
 
     stream.on('readable', () => {
@@ -240,7 +234,6 @@ export class SearcherClient {
    */
   async *accountUpdates(
     accounts: PublicKey[],
-    regions: string[],
     onError: (e: Error) => void
   ): AsyncGenerator<VersionedTransaction[]> {
     const stream: ClientReadableStream<PendingTxNotification> =
@@ -248,7 +241,6 @@ export class SearcherClient {
         wlaV0Sub: {
           accounts: accounts.map(a => a.toString()),
         },
-        regions,
       });
 
     stream.on('error', e => {

@@ -37,11 +37,10 @@ export enum TransactionErrorType {
   WOULD_EXCEED_ACCOUNT_DATA_TOTAL_LIMIT = 29,
   DUPLICATE_INSTRUCTION = 30,
   INSUFFICIENT_FUNDS_FOR_RENT = 31,
-  MAX_LOADED_ACCOUNTS_DATA_SIZE_EXCEEDED = 32,
-  INVALID_LOADED_ACCOUNTS_DATA_SIZE_LIMIT = 33,
-  RESANITIZATION_NEEDED = 34,
-  PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED = 35,
-  UNBALANCED_TRANSACTION = 36,
+  /** BUNDLE_NOT_CONTINUOUS - TODO (LB): this needs to be removed from here in jito-solana */
+  BUNDLE_NOT_CONTINUOUS = 32,
+  /** SKIPPED_EXECUTION - TODO (LB): this needs to be removed from here in jito-solana */
+  SKIPPED_EXECUTION = 33,
   UNRECOGNIZED = -1,
 }
 
@@ -144,20 +143,11 @@ export function transactionErrorTypeFromJSON(object: any): TransactionErrorType 
     case "INSUFFICIENT_FUNDS_FOR_RENT":
       return TransactionErrorType.INSUFFICIENT_FUNDS_FOR_RENT;
     case 32:
-    case "MAX_LOADED_ACCOUNTS_DATA_SIZE_EXCEEDED":
-      return TransactionErrorType.MAX_LOADED_ACCOUNTS_DATA_SIZE_EXCEEDED;
+    case "BUNDLE_NOT_CONTINUOUS":
+      return TransactionErrorType.BUNDLE_NOT_CONTINUOUS;
     case 33:
-    case "INVALID_LOADED_ACCOUNTS_DATA_SIZE_LIMIT":
-      return TransactionErrorType.INVALID_LOADED_ACCOUNTS_DATA_SIZE_LIMIT;
-    case 34:
-    case "RESANITIZATION_NEEDED":
-      return TransactionErrorType.RESANITIZATION_NEEDED;
-    case 35:
-    case "PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED":
-      return TransactionErrorType.PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED;
-    case 36:
-    case "UNBALANCED_TRANSACTION":
-      return TransactionErrorType.UNBALANCED_TRANSACTION;
+    case "SKIPPED_EXECUTION":
+      return TransactionErrorType.SKIPPED_EXECUTION;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -231,16 +221,10 @@ export function transactionErrorTypeToJSON(object: TransactionErrorType): string
       return "DUPLICATE_INSTRUCTION";
     case TransactionErrorType.INSUFFICIENT_FUNDS_FOR_RENT:
       return "INSUFFICIENT_FUNDS_FOR_RENT";
-    case TransactionErrorType.MAX_LOADED_ACCOUNTS_DATA_SIZE_EXCEEDED:
-      return "MAX_LOADED_ACCOUNTS_DATA_SIZE_EXCEEDED";
-    case TransactionErrorType.INVALID_LOADED_ACCOUNTS_DATA_SIZE_LIMIT:
-      return "INVALID_LOADED_ACCOUNTS_DATA_SIZE_LIMIT";
-    case TransactionErrorType.RESANITIZATION_NEEDED:
-      return "RESANITIZATION_NEEDED";
-    case TransactionErrorType.PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED:
-      return "PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED";
-    case TransactionErrorType.UNBALANCED_TRANSACTION:
-      return "UNBALANCED_TRANSACTION";
+    case TransactionErrorType.BUNDLE_NOT_CONTINUOUS:
+      return "BUNDLE_NOT_CONTINUOUS";
+    case TransactionErrorType.SKIPPED_EXECUTION:
+      return "SKIPPED_EXECUTION";
     case TransactionErrorType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
@@ -298,10 +282,8 @@ export enum InstructionErrorType {
   ARITHMETIC_OVERFLOW = 47,
   UNSUPPORTED_SYSVAR = 48,
   ILLEGAL_OWNER = 49,
-  MAX_ACCOUNTS_DATA_ALLOCATIONS_EXCEEDED = 50,
+  MAX_ACCOUNTS_DATA_SIZE_EXCEEDED = 50,
   MAX_ACCOUNTS_EXCEEDED = 51,
-  MAX_INSTRUCTION_TRACE_LENGTH_EXCEEDED = 52,
-  BUILTIN_PROGRAMS_MUST_CONSUME_COMPUTE_UNITS = 53,
   UNRECOGNIZED = -1,
 }
 
@@ -458,17 +440,11 @@ export function instructionErrorTypeFromJSON(object: any): InstructionErrorType 
     case "ILLEGAL_OWNER":
       return InstructionErrorType.ILLEGAL_OWNER;
     case 50:
-    case "MAX_ACCOUNTS_DATA_ALLOCATIONS_EXCEEDED":
-      return InstructionErrorType.MAX_ACCOUNTS_DATA_ALLOCATIONS_EXCEEDED;
+    case "MAX_ACCOUNTS_DATA_SIZE_EXCEEDED":
+      return InstructionErrorType.MAX_ACCOUNTS_DATA_SIZE_EXCEEDED;
     case 51:
     case "MAX_ACCOUNTS_EXCEEDED":
       return InstructionErrorType.MAX_ACCOUNTS_EXCEEDED;
-    case 52:
-    case "MAX_INSTRUCTION_TRACE_LENGTH_EXCEEDED":
-      return InstructionErrorType.MAX_INSTRUCTION_TRACE_LENGTH_EXCEEDED;
-    case 53:
-    case "BUILTIN_PROGRAMS_MUST_CONSUME_COMPUTE_UNITS":
-      return InstructionErrorType.BUILTIN_PROGRAMS_MUST_CONSUME_COMPUTE_UNITS;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -578,14 +554,10 @@ export function instructionErrorTypeToJSON(object: InstructionErrorType): string
       return "UNSUPPORTED_SYSVAR";
     case InstructionErrorType.ILLEGAL_OWNER:
       return "ILLEGAL_OWNER";
-    case InstructionErrorType.MAX_ACCOUNTS_DATA_ALLOCATIONS_EXCEEDED:
-      return "MAX_ACCOUNTS_DATA_ALLOCATIONS_EXCEEDED";
+    case InstructionErrorType.MAX_ACCOUNTS_DATA_SIZE_EXCEEDED:
+      return "MAX_ACCOUNTS_DATA_SIZE_EXCEEDED";
     case InstructionErrorType.MAX_ACCOUNTS_EXCEEDED:
       return "MAX_ACCOUNTS_EXCEEDED";
-    case InstructionErrorType.MAX_INSTRUCTION_TRACE_LENGTH_EXCEEDED:
-      return "MAX_INSTRUCTION_TRACE_LENGTH_EXCEEDED";
-    case InstructionErrorType.BUILTIN_PROGRAMS_MUST_CONSUME_COMPUTE_UNITS:
-      return "BUILTIN_PROGRAMS_MUST_CONSUME_COMPUTE_UNITS";
     case InstructionErrorType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
