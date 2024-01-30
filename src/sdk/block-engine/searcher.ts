@@ -21,6 +21,7 @@ import {
 import {authInterceptor, AuthProvider} from './auth';
 import {Bundle} from './types';
 import {deserializeTransactions} from './utils';
+import {Packet} from "../../gen/block-engine/packet";
 
 export class SearcherClient {
   private client: SearcherServiceClient;
@@ -133,7 +134,7 @@ export class SearcherClient {
    */
   onProgramUpdate(
     programs: PublicKey[],
-    successCallback: (transactions: VersionedTransaction[]) => void,
+    successCallback: (transactions: Packet[]) => void,
     errorCallback: (e: Error) => void
   ): () => void {
     const stream: ClientReadableStream<PendingTxNotification> =
@@ -146,7 +147,7 @@ export class SearcherClient {
     stream.on('readable', () => {
       const msg = stream.read(1);
       if (msg) {
-        successCallback(deserializeTransactions(msg.transactions));
+        successCallback(msg.transactions);
       }
     });
     stream.on('error', e => {
