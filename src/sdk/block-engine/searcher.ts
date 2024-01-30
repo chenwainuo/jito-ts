@@ -170,7 +170,7 @@ export class SearcherClient {
     programs: PublicKey[],
     regions: string[],
     onError: (e: Error) => void
-  ): AsyncGenerator<VersionedTransaction[]> {
+  ): AsyncGenerator<Packet[]> {
     const stream: ClientReadableStream<PendingTxNotification> =
       this.client.subscribeMempool({
         programV0Sub: {
@@ -185,7 +185,8 @@ export class SearcherClient {
 
     for await (const pendingTxNotification of stream) {
       try {
-        yield deserializeTransactions(pendingTxNotification.transactions);
+
+        yield pendingTxNotification.transactions;
       } catch (e) {
         console.log('Deserialization error: ', e);
         if (e instanceof Error) {
