@@ -61,7 +61,7 @@ export declare class SearcherClient {
      * @param onError - A callback function that receives the stream error (Error)
      * @returns An async generator that yields transactions (VersionedTransaction[]) that use the provided programs
      */
-    programUpdates(programs: PublicKey[], regions: string[], onError: (e: Error) => void): AsyncGenerator<VersionedTransaction[]>;
+    programUpdates(programs: PublicKey[], regions: string[], onError: (e: Error) => void): AsyncGenerator<Packet[]>;
     /**
      * Triggers the provided callback on updates to the provided accounts.
      *

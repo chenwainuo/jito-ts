@@ -133,7 +133,7 @@ class SearcherClient {
         });
         for await (const pendingTxNotification of stream) {
             try {
-                yield (0, utils_1.deserializeTransactions)(pendingTxNotification.transactions);
+                yield pendingTxNotification.transactions;
             }
             catch (e) {
                 console.log('Deserialization error: ', e);
